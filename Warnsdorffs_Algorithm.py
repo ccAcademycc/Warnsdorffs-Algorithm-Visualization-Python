@@ -1,44 +1,55 @@
 from manim import *
 
+
+# This function returns an array containing all reachable positions for the knight.
+def position_array(board, row, column):
+    num_rows = len(board)
+    num_columns = len(board[0])
+    delta_row = (2, 1, 2, 1, -2, -1, -2, -1)
+    delta_column = (1, 2, -1, -2, 1, 2, -1, -2)
+    reachable_positions = []
+    for i in range(8):
+        if (row + delta_row[i] >= 0 and row + delta_row[i] <= num_rows - 1
+                and column + delta_column[i] >= 0 and column + delta_column[i] <= num_columns - 1
+                and board[row + delta_row[i]][column + delta_column[i]] == - 1):
+            reachable_positions.append([row + delta_row[i], column + delta_column[i]])
+    return reachable_positions
+
+
+# This function returns a (rows x columns) knight's tour matrix, starting from (row, column).
+def tour_matrix(rows, columns, row, column):
+    board = [[-1 for _ in range(columns)] for _ in range(rows)]
+    number = 0
+    board[row][column] = number
+    end_loop = columns * rows - 1
+    for i in range(end_loop):
+        pos_array = position_array(board, row, column)
+        if len(pos_array) > 0:
+            reachable_positions = position_array(board, row, column)
+        else:
+            return board
+        minimum = reachable_positions[0]
+        for pos in reachable_positions:
+            if len(position_array(board, pos[0], pos[1])) < len(position_array(board, minimum[0], minimum[1])):
+                minimum = pos
+        row = minimum[0]
+        column = minimum[1]
+        board[row][column] = number + 1
+        number = number + 1
+    return board
+
+
+# This function searches for a number in a matrix and returns its row and column indices, or it returns None if not found.
+def find_pos(number, matrix):
+    for row_index, row in enumerate(matrix):
+        if number in row:
+            col_index = row.index(number)
+            return [row_index, col_index, 0]
+    return None
+
 class Warnsdorffs_Algorithm(MovingCameraScene):
     def construct(self):
         self.camera.background_color = BLACK
-
-        # This function returns an array containing all reachable positions for the knight.
-        def position_array(board, row, column):
-            num_rows = len(board)
-            num_columns = len(board[0])
-            delta_row = (2, 1, 2, 1, -2, -1, -2, -1)
-            delta_column = (1, 2, -1, -2, 1, 2, -1, -2)
-            reachable_positions = []
-            for i in range(8):
-                if (row + delta_row[i] >= 0 and row + delta_row[i] <= num_rows - 1
-                    and column + delta_column[i] >= 0 and column + delta_column[i] <= num_columns - 1
-                        and board[row + delta_row[i]][column + delta_column[i]] == - 1):
-                    reachable_positions.append([row + delta_row[i], column + delta_column[i]])
-            return reachable_positions
-
-        # This function returns a (rows x columns) knight's tour matrix, starting from (row, column).
-        def tour_matrix(rows, columns, row, column):
-            board = [[-1 for _ in range(columns)] for _ in range(rows)]
-            number = 0
-            board[row][column] = number
-            end_loop = columns * rows - 1
-            for i in range(end_loop):
-                pos_array = position_array(board, row, column)
-                if len(pos_array) > 0:
-                   reachable_positions = position_array(board, row, column)
-                else:
-                   return board
-                minimum = reachable_positions[0]
-                for pos in reachable_positions:
-                    if len(position_array(board, pos[0], pos[1])) < len(position_array(board, minimum[0], minimum[1])):
-                        minimum = pos
-                row = minimum[0]
-                column = minimum[1]
-                board[row][column] = number + 1
-                number = number + 1
-            return board
 
         # This function returns a visualization of a chessboard (VGroups of Rectangle objects).
         def return_ChessBoard(rows, columns):
@@ -60,14 +71,6 @@ class Warnsdorffs_Algorithm(MovingCameraScene):
                 chess_board.add(vg)
             chess_board.move_to(ORIGIN)
             return chess_board
-
-        # This function searches for a number in a matrix and returns its row and column indices, or it returns None if not found.
-        def find_pos(number, matrix):
-            for row_index, row in enumerate(matrix):
-                if number in row:
-                    col_index = row.index(number)
-                    return [row_index, col_index, 0]
-            return None
 
         # This function visualizes a knight's tour on a (rows x columns) chessboard, starting from (row, column).
         # Input:
@@ -164,4 +167,3 @@ class Warnsdorffs_Algorithm(MovingCameraScene):
         # Visualization of a knight's tour on a (3 x 4) board, starting from (0,0).
         visualize_KnightsTour(3,4,
                                0,0)
-
