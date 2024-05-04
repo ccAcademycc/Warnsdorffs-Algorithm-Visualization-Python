@@ -1,6 +1,5 @@
 from manim import *
 
-
 # This function returns an array containing all reachable positions for the knight.
 def position_array(board, row, column):
     num_rows = len(board)
@@ -14,7 +13,6 @@ def position_array(board, row, column):
                 and board[row + delta_row[i]][column + delta_column[i]] == - 1):
             reachable_positions.append([row + delta_row[i], column + delta_column[i]])
     return reachable_positions
-
 
 # This function returns a (rows x columns) knight's tour matrix, starting from (row, column).
 def tour_matrix(rows, columns, row, column):
@@ -37,7 +35,6 @@ def tour_matrix(rows, columns, row, column):
         board[row][column] = number + 1
         number = number + 1
     return board
-
 
 # This function searches for a number in a matrix and returns its row and column indices, or it returns None if not found.
 def find_pos(number, matrix):
