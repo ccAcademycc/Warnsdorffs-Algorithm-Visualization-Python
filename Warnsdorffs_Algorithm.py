@@ -4,12 +4,12 @@ from manim import *
 def position_array(board, row, column):
     num_rows = len(board)
     num_columns = len(board[0])
-    delta_row = (2, 1, 2, 1, -2, -1, -2, -1)
-    delta_column = (1, 2, -1, -2, 1, 2, -1, -2)
+    delta_row = [2, 1, 2, 1, -2, -1, -2, -1]
+    delta_column = [1, 2, -1, -2, 1, 2, -1, -2]
     reachable_positions = []
     for i in range(8):
         if (row + delta_row[i] >= 0 and row + delta_row[i] <= num_rows - 1
-                and column + delta_column[i] >= 0 and column + delta_column[i] <= num_columns - 1
+            and column + delta_column[i] >= 0 and column + delta_column[i] <= num_columns - 1
                 and board[row + delta_row[i]][column + delta_column[i]] == - 1):
             reachable_positions.append([row + delta_row[i], column + delta_column[i]])
     return reachable_positions
